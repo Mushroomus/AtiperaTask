@@ -27,7 +27,7 @@ public class GithubServiceImpl implements GithubService {
         headers = new HttpHeaders();
     }
 
-    @Value("${github.personalAccessToken}")
+    @Value("${github.personalAccessToken:}")
     private String personalAccessToken;
 
     @Override
@@ -73,6 +73,11 @@ public class GithubServiceImpl implements GithubService {
     }
 
     private HttpEntity<String> createHttpEntity() {
+
+        if (personalAccessToken.isEmpty()) {
+            return null;
+        }
+
         headers.set("Authorization", "Bearer " + personalAccessToken);
         HttpEntity<String> entity = new HttpEntity<>(headers);
         return entity;
